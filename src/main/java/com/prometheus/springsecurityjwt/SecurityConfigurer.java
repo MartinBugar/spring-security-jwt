@@ -34,7 +34,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 
-    @Bean
+    @Bean// authentication manager neni primarne bean, tak ju tu treba oznacit
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -43,9 +43,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate")
+                .authorizeRequests().antMatchers("/authenticate")// pri tej url prejdu vsetci bez autentikacie lebo uz su autentikovany
                 .permitAll().anyRequest().authenticated().and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                //filter pridany
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);// aby nevytrvaral session
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
