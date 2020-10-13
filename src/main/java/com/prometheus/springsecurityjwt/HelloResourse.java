@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-
 public class HelloResourse {
 
     @Autowired
@@ -47,7 +46,7 @@ public class HelloResourse {
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        return ResponseEntity.ok(new AuthenticationResponse(jwt)); // vrati status kod 200 a taktiez vrati jwt naspet uzivatelovi
 
     }
 

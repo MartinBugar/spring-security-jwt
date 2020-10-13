@@ -17,11 +17,11 @@ public class JwtUtil {
 
     private String SECRET_KEY = "secret";
 
-    public String extractUsername (String token){
+    public String extractUsername (String token){ // natiahne informaciu z existujuceho tokenu
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Date extractExpiration(String token){
+    public Date extractExpiration(String token){ //natiahne informaciu z existujuceho tokenu
         return extractClaim(token, Claims::getExpiration);
     }
 
@@ -30,11 +30,11 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token){ //responsible for validation of token - vyhodi exception ak ak je signature invalid alebo je token expired
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(String token){
+    private Boolean isTokenExpired(String token){ // zisti ci je token expirovany
         return extractExpiration(token).before(new Date());
     }
 
@@ -49,7 +49,7 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken (String token, UserDetails userDetails){
+    public Boolean validateToken (String token, UserDetails userDetails){ // ak je spravne meno a nieje expirovany tak je validny
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
